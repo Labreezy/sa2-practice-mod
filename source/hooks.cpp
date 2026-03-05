@@ -1,9 +1,4 @@
-#include "pch.h"
 #include "hooks.h"
-#include "imgui_impl_win32.h"
-#include "SA2Functions.h"
-#include "magic.h"
-#include "FunctionHook.h"
 
 
 static StdcallFunctionHook<LRESULT, HWND, UINT, WPARAM, LPARAM>* wndProcHook = new StdcallFunctionHook<LRESULT, HWND, UINT, WPARAM, LPARAM>(WndProc);

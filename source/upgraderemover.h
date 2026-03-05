@@ -1,42 +1,70 @@
 #pragma once
 #include "pch.h"
 #include <imgui.h>
+#include <map>
+#include <vector>
 
-// upgrades are a bitfield within CharObj2
-// the demo in imgui works with just booleans, is it possible for me to cast that bit as a boolean??
-// how do i write to that bit?
+enum SonicUpgrades : int {
+	LightShoes,
+	Sonic_AncientLight,
+	MagicGloves,
+	Sonic_FlameRing,
+	BounceBracelet,
+	Sonic_MysticMelody
+};
 
-// MORE NOTES:
-// starting at address 0x01DEB300, there are 29 booleans (a byte each) for a specific upgrade.
-// this is different from the MainCharObj2's upgrade bitfield (4-byte int) 
-// emerua's "realtime" toggle updates the charobj2's bitfield with the upgrade bytes, while also updating the upgrade booleans.
-// informative stuff!
-//
-//if (checkBox2.CheckState == CheckState.Checked && rwRAM.getCurrentStageNumber() != 0)
-//{
-//	rwRAM.setUpgradeRealtime(num, b);
-//}
+enum TailsUpgrades : int {
+	Booster,
+	Bazooka,
+	Tails_LaserBlaster,
+	Tails_MysticMelody
+};
 
-// for locking upgrades: this is what emerua does, id probably just copy luna's upgrade restart code though
-//if (checkBox1.CheckState == CheckState.Checked) - checkbox 1 = "Lock"
-//{
-//	if (rwRAM.getCurrentStageNumber() == 0)
-//	{
-//		for (int i = 0; i < UpgradesArray.Length; i++)
-//		{
-//			UpgradesArray[i] = Convert.ToByte(Nodes[i].Checked);
-//		}
-//		rwRAM.setUpgradeRange(UpgradesArray);
+enum KnuxUpgrades : int {
+	ShovelClaws,
+	Sunglasses,
+	HammerGloves,
+	AirNecklace,
+	Knux_MysticMelody
+};
+
+enum ShadowUpgrades : int {
+	AirShoes,
+	Shadow_AncientLight,
+	Shadow_FlameRing,
+	Shadow_MysticMelody
+};
+
+enum EggmanUpgrades : int {
+	JetEngine,
+	LargeCannon,
+	Eggman_LaserBlaster,
+	ProtectiveArmor,
+	Eggman_MysticMelody
+};
+
+enum RougeUpgrades : int {
+	PickNails,
+	TreasureScope,
+	IronBoots,
+	Rouge_MysticMelody
+};
 
 // upgrade booleans stored on file (there are 29 bytes to update)
-// thank you Emerua for making UpgradeRemover & figuring this out
+// thank you Emerua for making UpgradeRemover & finding this address
 DataArray(bool, UpgradesOnFile, 0x1DEB300, 29);
-
 
 class UpgradeRemover {
 	public:
-		UpgradeRemover() {};
+		UpgradeRemover();
 		void UpdateRealTime(CharObj2Base* player);
+		void SetStoryUpgrades(short currentLevel, CharObj2Base* player);
+		void SetSonicUpgrades(std::vector<bool> upgrades);
+		void SetTailsUpgrades(std::vector<bool> upgrades);
+		void SetKnuxUpgrades(std::vector<bool> upgrades);
+		void SetShadowUpgrades(std::vector<bool> upgrades);
+		void SetEggmanUpgrades(std::vector<bool> upgrades);
+		void SetRougeUpgrades(std::vector<bool> upgrades);
 		void RenderTab();
 		void SonicTab();
 		void TailsTab();
@@ -44,4 +72,6 @@ class UpgradeRemover {
 		void ShadowTab();
 		void EggmanTab();
 		void RougeTab();
+	private:
+		std::map<int, std::vector<bool>> StoryUpgradesTable;
 };
