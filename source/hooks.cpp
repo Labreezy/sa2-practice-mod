@@ -1,5 +1,6 @@
 #include "hooks.h"
 
+// TODO: fix the window breaking when resizing
 
 static StdcallFunctionHook<LRESULT, HWND, UINT, WPARAM, LPARAM>* wndProcHook = new StdcallFunctionHook<LRESULT, HWND, UINT, WPARAM, LPARAM>(WndProc);
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

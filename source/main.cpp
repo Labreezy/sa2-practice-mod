@@ -10,6 +10,7 @@ extern "C"
 {
 	static UpgradeRemover* UpgradeR = new UpgradeRemover();
 
+
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
 		// setup imgui - huge thanks to labrys for helping me with this
