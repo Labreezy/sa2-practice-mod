@@ -9,7 +9,7 @@ static bool esgToggle = 0;
 
 void Settings::RenderTab() {
 	if (ImGui::CollapsingHeader("Settings")) {
-		ImGui::Checkbox("Emblem Skip Glitch", &esgFlag);
+		ImGui::Checkbox("Emblem Skip Glitch", &esgToggle);
 		ImGui::Checkbox("PP Skip Reset", &ppSkipToggle);
 		ImGui::SetTooltip("If checked, reset the variable that pushes the kart forward for 120 frames on every load/restart. Only relevant for Route 101/280.");
 		//ImGui::InputInt2("Times Restarted or Died", (int*)TimesRestartedOrDied);
