@@ -2,7 +2,8 @@
 
 static bool ppSkipToggle = 0;
 static bool esgToggle = 0;
-
+static bool egRestartLockToggle = 0;
+static int restartDeathCounter = 0;
 // hooks
 // restart function address stolen from https://github.com/StarlitLuna/sa2-story-style-upgrades
 FunctionHook<void> hRestartLevel((intptr_t)0x43C370);
@@ -19,16 +20,38 @@ void Settings::setESG() {
 	if (esgToggle) { esgFlag = 1; }
 }
 
+
 void Settings::RenderTab() {
 	if (ImGui::CollapsingHeader("Settings")) {
 		ImGui::Checkbox("Emblem Skip Glitch", &esgToggle);
 		ImGui::Checkbox("PP Skip Reset", &ppSkipToggle);
 		ImGui::SetItemTooltip("If checked, reset the variable that pushes the kart forward for 120 frames on every load/restart. Only relevant for Route 101/280.");
-		//ImGui::InputInt2("Times Restarted or Died", (int*)TimesRestartedOrDied);
-		//ImGui::SameLine(); HelpMarker(
-		//	"Adjusts the number of times the player has died or restarted."
-		//	"This is relevant for Egg Golem, where the boss delays itself"
-		//);
+		ImGui::Checkbox("Lock Egg Golem Death/Restart Counter", &egRestartLockToggle);
+		ImGui::SetItemTooltip(
+			"Adjusts the number of times the player has died or restarted."
+			"This is relevant for Egg Golem, where the boss delays itself"
+			"depending on how many times you have died/restarted."
+		);
+		ImGui::SameLine();
+		if (!egRestartLockToggle) {
+			ImGui::BeginDisabled();
+		}
+		//variable's a short so this is type-safe
+		ImGui::InputScalar("Deaths/Restarts", ImGuiDataType_S16, &restartDeathCounter,NULL, NULL, "%d");
+		if (!egRestartLockToggle) {
+			ImGui::EndDisabled();
+		}
+		
+	}
+}
+
+void Settings::OnFrame() {
+	if (egRestartLockToggle) {
+		if (restartDeathCounter > 99) {
+			restartDeathCounter = 99;
+		} if (CurrentLevel == LevelIDs_EggGolemE || CurrentLevel == LevelIDs_EggGolemS) {
+			TimesRestartedOrDied = restartDeathCounter;
+		}
 	}
 }
 

@@ -58,6 +58,8 @@ extern "C"
 			// update upgrades in real time
 			UpgradeR->UpdateRealTime(MainCharObj2[0]);
 		}
+		//unsure if this is the *best* idea but here we are
+		settings->OnFrame();
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()

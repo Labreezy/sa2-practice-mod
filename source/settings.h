@@ -14,6 +14,7 @@ public:
 	void setESG();
 	void resetPP();
 	void RenderTab();
+	void OnFrame();
 };
 
 void RestartLevel();
