@@ -1,8 +1,5 @@
 #include "upgraderemover.h"
 
-static bool realTime = 0;
-static bool storyUpgrades = 0;
-
 UpgradeRemover::UpgradeRemover() {
 	// initialize story style table
 	// TODO: make these not magic numbers?
@@ -57,27 +54,25 @@ UpgradeRemover::UpgradeRemover() {
 // regardless of whether or not your character has that upgrade.
 // the game only sets the bitfields for the character you're currently playing, so just set those instead.
 void UpgradeRemover::UpdateRealTime(CharObj2Base* player) {
-	if (realTime) {
-		int characterBitStart = 0;
-		int characterBitEnd = 0;
-		// grab character ID
-		char charID = player->CharID;
-		// set loop start & end per character
-		if (charID == Characters_Sonic) { characterBitStart = 0, characterBitEnd = 6; }
-		if (charID == Characters_MechTails) { characterBitStart = 6, characterBitEnd = 10; }
-		if (charID == Characters_Knuckles) { characterBitStart = 10; characterBitEnd = 15; }
-		if (charID == Characters_Shadow) { characterBitStart = 16; characterBitEnd = 20; }
-		if (charID == Characters_MechEggman) { characterBitStart = 20; characterBitEnd = 25; }
-		if (charID == Characters_Rouge) { characterBitStart = 25; characterBitEnd = 29; }
+	int characterBitStart = 0;
+	int characterBitEnd = 0;
+	// grab character ID
+	char charID = player->CharID;
+	// set loop start & end per character
+	if (charID == Characters_Sonic) { characterBitStart = 0, characterBitEnd = 6; }
+	if (charID == Characters_MechTails) { characterBitStart = 6, characterBitEnd = 10; }
+	if (charID == Characters_Knuckles) { characterBitStart = 10; characterBitEnd = 15; }
+	if (charID == Characters_Shadow) { characterBitStart = 16; characterBitEnd = 20; }
+	if (charID == Characters_MechEggman) { characterBitStart = 20; characterBitEnd = 25; }
+	if (charID == Characters_Rouge) { characterBitStart = 25; characterBitEnd = 29; }
 
-		int upgrades = 0;
-		// UpgradesOnFile is an array of 29 booleans, set all the upgrade bits for the character you're playing
-		// i figured this would be more efficient then writing out every upgrade bitfield manually
-		for (int i = characterBitStart; i < characterBitEnd; i++) {
-			upgrades = upgrades | (UpgradesOnFile[i] << i);
-		}
-		player->Upgrades = upgrades;
+	int upgrades = 0;
+	// UpgradesOnFile is an array of 29 booleans, set all the upgrade bits for the character you're playing
+	// i figured this would be more efficient then writing out every upgrade bitfield manually
+	for (int i = characterBitStart; i < characterBitEnd; i++) {
+		upgrades = upgrades | (UpgradesOnFile[i] << i);
 	}
+	player->Upgrades = upgrades;
 }
 
 void UpgradeRemover::SetStoryUpgrades(short currentLevel, CharObj2Base* player) {

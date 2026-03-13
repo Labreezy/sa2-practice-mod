@@ -9,12 +9,8 @@ DataPointer(int, ppSkipTimer, 0x1AEDEC8);
 
 class Settings {
 public:
-	Settings() { };
-	void init();
+	Settings() {};
 	void setESG();
-	void resetPP();
 	void RenderTab();
+	bool ppSkipToggleStatus();
 };
-
-void RestartLevel();
-void kart_delete();

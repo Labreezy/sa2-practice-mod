@@ -1,18 +1,10 @@
 #include "settings.h"
 
-static bool ppSkipToggle = 0;
 static bool esgToggle = 0;
+static bool ppSkipToggle = 0;
 
-// hooks
-// restart function address stolen from https://github.com/StarlitLuna/sa2-story-style-upgrades
-FunctionHook<void> hRestartLevel((intptr_t)0x43C370);
-// kart_delete function (thank you tenzit)
-FunctionHook<void> hkart_delete((intptr_t)0x61A910);
-
-
-void Settings::init() {
-	hRestartLevel.Hook(RestartLevel);
-	hkart_delete.Hook(kart_delete);
+bool Settings::ppSkipToggleStatus() {
+	return ppSkipToggle;
 }
 
 void Settings::setESG() {
@@ -32,17 +24,3 @@ void Settings::RenderTab() {
 	}
 }
 
-void RestartLevel() {
-	hRestartLevel.Original();
-	if (ppSkipToggle) {
-		ppSkipTimer = 0;
-	}
-}
-
-// called when exiting the level
-void kart_delete() {
-	hkart_delete.Original();
-	if (ppSkipToggle) {
-		ppSkipTimer = 0;
-	}
-}

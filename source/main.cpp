@@ -9,9 +9,8 @@
 
 extern "C"
 {
-	static UpgradeRemover* UpgradeR = new UpgradeRemover();
+	static UpgradeRemover* upgradeR = new UpgradeRemover();
 	static Settings* settings = new Settings();
-
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
@@ -21,10 +20,7 @@ extern "C"
 		ImGui_ImplWin32_Init(MainWindowHandle);
 		ImGui_ImplDX9_Init(g_pRenderDevice->m_pD3DDevice);
 		ImGui::StyleColorsDark();
-		initHooks(); // for the window message handling for imgui
-
-		settings->init();
-
+		initHooks(upgradeR, settings);
 	}
 	__declspec(dllexport) void __cdecl OnRenderSceneStart() {
 		ImGui_ImplDX9_NewFrame();
@@ -32,8 +28,8 @@ extern "C"
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Practice Mod");
-		
-		UpgradeR->RenderTab();
+
+		upgradeR->RenderTab();
 		settings->RenderTab();
 
 		// tests
@@ -50,22 +46,29 @@ extern "C"
 
 	__declspec(dllexport) void __cdecl OnFrame()
 	{
-		if (GameState == GameStates_Loading) {
-			UpgradeR->SetStoryUpgrades(CurrentLevel, MainCharObj2[0]);
+		if (GameState == GameStates_Loading && upgradeR->storyUpgradesToggleStatus()) {
+			upgradeR->SetStoryUpgrades(CurrentLevel, MainCharObj2[0]);
 		}
+
+		if ((GameState == GameStates_LoadFinished or GameState == GameStates_Ingame or GameState == GameStates_Pause) && upgradeR->realtimeUpgradesToggleStatus()) {
+			upgradeR->UpdateRealTime(MainCharObj2[0]);
+		}
+
 		
-		if (GameState == GameStates_LoadFinished or GameState == GameStates_Ingame or GameState == GameStates_Pause) {
-			// update upgrades in real time
-			UpgradeR->UpdateRealTime(MainCharObj2[0]);
-		}
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
 	{
-		if (GameState == GameStates_Pause) {
-			// todo: figure out restoring upgrades on restart
+		// unfortunately, no inputs are registered on restart until the fade-out is complete. 
+		// lets assume that if the player presses y at any point during gamestate 13, they wanted
+		// to reset upgrades back to story style.
+		if (GameState == GameStates_NormalRestart) {
+			if ((ControllerPointers[0]->on & Buttons_Y) && upgradeR->storyUpgradesToggleStatus()) {
+				upgradeR->SetStoryUpgrades(CurrentLevel, MainCharObj2[0]);
+			}
 		}
 	}
-
+	
 	__declspec(dllexport) ModInfo SA2ModInfo = { ModLoaderVer }; // This is needed for the Mod Loader to recognize the DLL.
 }
+

@@ -72,7 +72,13 @@ class UpgradeRemover {
 		void ShadowTab();
 		void EggmanTab();
 		void RougeTab();
+		bool storyUpgradesToggleStatus() { return storyUpgrades; };
+		bool realtimeUpgradesToggleStatus() { return realTime; };
 	private:
 		std::map<int, std::vector<bool>> StoryUpgradesTable;
+		bool storyUpgrades = 0;
+		bool realTime = 0;
+		int prevButtons = 0;
+		int currButtons = 0;
 };
 
