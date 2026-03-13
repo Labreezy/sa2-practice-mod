@@ -12,8 +12,8 @@ FunctionHook<void> hkart_delete((intptr_t)0x61A910);
 
 
 void Settings::init() {
-	hRestartLevel.Hook(RestartLevel);
-	hkart_delete.Hook(kart_delete);
+	hRestartLevel.Hook(restartLevel_impl);
+	hkart_delete.Hook(kart_delete_impl);
 }
 
 void Settings::setESG() {
@@ -55,7 +55,7 @@ void Settings::OnFrame() {
 	}
 }
 
-void RestartLevel() {
+void restartLevel_impl() {
 	hRestartLevel.Original();
 	if (ppSkipToggle) {
 		ppSkipTimer = 0;
@@ -63,7 +63,7 @@ void RestartLevel() {
 }
 
 // called when exiting the level
-void kart_delete() {
+void kart_delete_impl() {
 	hkart_delete.Original();
 	if (ppSkipToggle) {
 		ppSkipTimer = 0;

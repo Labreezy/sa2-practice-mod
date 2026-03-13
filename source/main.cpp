@@ -11,6 +11,8 @@ extern "C"
 {
 	static UpgradeRemover* UpgradeR = new UpgradeRemover();
 	static Settings* settings = new Settings();
+	//for later
+	static ImGuiWindowFlags osd_windowflags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
 
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
@@ -18,6 +20,11 @@ extern "C"
 		// setup imgui - huge thanks to labrys for helping me with this
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+
+		ImGuiIO &io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+
 		ImGui_ImplWin32_Init(MainWindowHandle);
 		ImGui_ImplDX9_Init(g_pRenderDevice->m_pD3DDevice);
 		ImGui::StyleColorsDark();
@@ -31,6 +38,7 @@ extern "C"
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow();
+
 		ImGui::Begin("Practice Mod");
 		
 		UpgradeR->RenderTab();
@@ -46,6 +54,13 @@ extern "C"
 
 		ImGui::Render();
 		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		//i don't care atm lol
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()

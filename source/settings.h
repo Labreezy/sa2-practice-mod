@@ -17,5 +17,5 @@ public:
 	void OnFrame();
 };
 
-void RestartLevel();
-void kart_delete();
+void restartLevel_impl();
+void kart_delete_impl();
