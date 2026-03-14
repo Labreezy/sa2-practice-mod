@@ -11,6 +11,8 @@ extern "C"
 {
 	static UpgradeRemover* upgradeR = new UpgradeRemover();
 	static Settings* settings = new Settings();
+	static bool displayMenus = true;
+	static bool prevF1Press = false;
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
@@ -23,29 +25,33 @@ extern "C"
 		initHooks(upgradeR, settings);
 	}
 	__declspec(dllexport) void __cdecl OnRenderSceneStart() {
-		ImGui_ImplDX9_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		ImGui::Begin("Practice Mod");
+		if (displayMenus) {
+			ImGui_ImplDX9_NewFrame();
+			ImGui_ImplWin32_NewFrame();
+			ImGui::NewFrame();
+			ImGui::ShowDemoWindow();
+			ImGui::Begin("Practice Mod");
 
-		upgradeR->RenderTab();
-		settings->RenderTab();
+			upgradeR->RenderTab();
+			settings->RenderTab();
 
-		// tests
-		ImGui::Text("Holy shit its level id %d", CurrentLevel);
-
-		ImGui::End();
+			// tests
+			ImGui::Text("Holy shit its level id %d", CurrentLevel);
+			ImGui::Text("Press F1 to toggle the windows on or off.");
+			ImGui::End();
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnRenderSceneEnd() {
 
-		ImGui::Render();
-		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		if (displayMenus) {
+			ImGui::Render();
+			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnFrame()
-	{
+	{	
 		if (GameState == GameStates_Loading && upgradeR->storyUpgradesToggleStatus()) {
 			upgradeR->SetStoryUpgrades(CurrentLevel, MainCharObj2[0]);
 		}
@@ -55,6 +61,17 @@ extern "C"
 		}
 
 		
+	}
+
+	__declspec(dllexport) void __cdecl OnInput() {
+		bool F1Press = GetKeyState(VK_F1) & 0x8000;
+		if (F1Press && !prevF1Press) {
+			displayMenus = !displayMenus;
+			prevF1Press = true;
+		}
+		else if (!F1Press) {
+			prevF1Press = false;
+		}
 	}
 
 	__declspec(dllexport) void __cdecl OnControl()
