@@ -28,8 +28,8 @@ void Settings::RenderTab() {
 		ImGui::SetItemTooltip("If checked, reset the variable that pushes the kart forward for 120 frames on every load/restart. Only relevant for Route 101/280.");
 		ImGui::Checkbox("Lock Egg Golem Death/Restart Counter", &egRestartLockToggle);
 		ImGui::SetItemTooltip(
-			"Adjusts the number of times the player has died or restarted."
-			"This is relevant for Egg Golem, where the boss delays itself"
+			"Adjusts the number of times the player has died or restarted.\n"
+			"This is relevant for Egg Golem, where the boss delays itself\n"
 			"depending on how many times you have died/restarted."
 		);
 		ImGui::SameLine();

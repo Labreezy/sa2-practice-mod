@@ -6,31 +6,44 @@
 #include "magic.h"
 #include "upgraderemover.h"
 #include "settings.h"
+#include "Inifile.hpp"
+#include "hunting.h"
 
 extern "C"
 {
 	static UpgradeRemover* UpgradeR = new UpgradeRemover();
 	static Settings* settings = new Settings();
+	static HuntingSettings* huntingSettings = new HuntingSettings();
 	//for later
 	static ImGuiWindowFlags osd_windowflags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
 
 
 	__declspec(dllexport) void __cdecl Init(const char* path, const HelperFunctions& helperFunctions)
 	{
+
+		HelperFunctions HelperFunctionsGlobal = helperFunctions;
+		
+		std::string modpath(path);
+		const IniFile* config = new IniFile(modpath + "\\config.ini");
+		bool useMultiViewports = config->getBool("GeneralSettings", "multiEnabled", false);
+
+
 		// setup imgui - huge thanks to labrys for helping me with this
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
 		ImGuiIO &io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
+		if (useMultiViewports) {
+			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		}
 
 		ImGui_ImplWin32_Init(MainWindowHandle);
 		ImGui_ImplDX9_Init(g_pRenderDevice->m_pD3DDevice);
 		ImGui::StyleColorsDark();
-		initHooks(); // for the window message handling for imgui
+		initWndprocHook(); // for the window message handling for imgui
 
 		settings->init();
+		huntingSettings->init();
 
 	}
 	__declspec(dllexport) void __cdecl OnRenderSceneStart() {
@@ -43,6 +56,7 @@ extern "C"
 		
 		UpgradeR->RenderTab();
 		settings->RenderTab();
+		huntingSettings->RenderTab();
 
 		// tests
 		ImGui::Text("Holy shit its level id %d", CurrentLevel);
@@ -54,8 +68,9 @@ extern "C"
 
 		ImGui::Render();
 		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-		//i don't care atm lol
+		//i don't care about performance per se atm lol
 		ImGuiIO& io = ImGui::GetIO();
+		//but you gotta do this at the end
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			ImGui::UpdatePlatformWindows();

@@ -84,7 +84,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;SA2_PRACTICE_MOD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SA2_PRACTICE_MOD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -105,7 +105,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;SA2_PRACTICE_MOD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SA2_PRACTICE_MOD_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -165,8 +165,11 @@
     <ClInclude Include="..\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\imgui\imstb_textedit.h" />
     <ClInclude Include="..\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\sa2-mod-loader\mod-loader-common\ModLoaderCommon\IniFile.hpp" />
+    <ClInclude Include="..\sa2-mod-loader\mod-loader-common\ModLoaderCommon\TextConv.hpp" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="hooks.h" />
+    <ClInclude Include="hunting.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="upgraderemover.h" />
@@ -200,7 +203,10 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\sa2-mod-loader\mod-loader-common\ModLoaderCommon\IniFile.cpp" />
+    <ClCompile Include="..\sa2-mod-loader\mod-loader-common\ModLoaderCommon\TextConv.cpp" />
     <ClCompile Include="hooks.cpp" />
+    <ClCompile Include="hunting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -13,7 +13,7 @@ LRESULT __stdcall wndProc_h(HWND hwnd, UINT umsg, WPARAM wParam, LPARAM lParam) 
 	return wndProcHook->Original(hwnd, umsg, wParam, lParam);
 }
 
-void initHooks() {
+void initWndprocHook() {
 	wndProcHook->Hook(wndProc_h);
 
 }
