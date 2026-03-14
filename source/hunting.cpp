@@ -1,4 +1,5 @@
 #include "hunting.h"
+#include "utils.h"
 #include <vector>
 #include <random>
 
@@ -32,7 +33,7 @@ void HuntingSettings::init() {
 void HuntingSettings::RenderTab() {
 	if (ImGui::CollapsingHeader("Hunting Settings")) {
 		ImGui::Checkbox("Cycle Through All Pieces", &useSetCoverSets);
-		ImGui::SetItemTooltip("If checked, will cycle randomly through a list of sets that give you every piece possible in a stage.");
+		Utils::HelpMarker("If checked, will cycle randomly through a list of sets that give you every piece possible in a stage.");
 	}
 }
 
