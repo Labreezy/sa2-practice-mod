@@ -1,11 +1,12 @@
 ideas:
 
+upgrade remover but ingame!! X
+pp skip/egg golem timer refresh X
+esg toggle X
 the ability to warp to whatever level id you want with the proper variables already set in place
-upgrade remover but ingame!!
-pp skip/egg golem timer refresh
-safe setting
-esg toggle
-Chao stat viewer maybe?? stuff that would be useful for chao%
+ingame labrys mod
 better savestates in an ideal world????
-imgui is the key..
-Also Also ingame labrys mod
+
+later:
+safe setting ?
+Chao stat viewer maybe?? stuff that would be useful for chao%
