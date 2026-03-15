@@ -1,5 +1,8 @@
 #include "FastDeath.h"
 
+// thank you tenzit for finding this function for me
+FunctionHook<void> DeathReload((intptr_t)0x43C340);
+
 // The original Fast Death tool was made by jellyfishswimmer.
 // all the death positions were stolen from jelly's tool.
 // Thanks for your incredible awesome epic work turtlechuck...
@@ -60,9 +63,20 @@ FastDeath::FastDeath() {
 }
 
 // given level key, set player position to the relevant vector
-void FastDeath::KillPlayer(int levelID) {
+void FastDeath::KillPlayerOld(int levelID) {
 	if (this->death_positions.count(levelID) > 0) {
 		MainCharObj1[0]->Position = death_positions[levelID];
+	}
+}
+
+// gamestate 12 does the instant restart
+// you need to set the Dead bit in the Powerup bitfield
+// DeathReload is a function that stops the timer, disables pausing and controller input.
+void FastDeath::KillPlayer() {
+	if (Life_Count[0] > (short)0) {
+		GameState = GameStates_RestartLevel_1;
+		MainCharObj2[0]->Powerups |= Powerups_Dead;
+		DeathReload.Original();
 	}
 }
 
@@ -75,7 +89,7 @@ void FastDeath::OnInput() {
 		this->prevButtons = buttons; // if bit = 1, prevButtons will be negated to prevent double presses.
 
 		if (buttonsPressed & Buttons_Right) {
-			this->KillPlayer(CurrentLevel);
+			this->KillPlayer();
 		}
 	}
 }

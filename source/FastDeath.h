@@ -8,7 +8,8 @@ class FastDeath {
 public:
 	FastDeath();
 	void OnInput();
-	void KillPlayer(int levelID);
+	void KillPlayerOld(int levelID);
+	void KillPlayer();
 	void RenderTab();
 private:
 	std::map<int, NJS_VECTOR> death_positions;
